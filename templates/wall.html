@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>The Wall</title>
+    </head>
+    <body>
+        <div id = "header">
+            <h1> Coding Dojo Wall</h1>
+            <p>welcome {{current_user_name}}</p>
+            <a href="/logout">Log off</a>
+        </div>
+        <div>
+            <h3>Post a message</h3>
+            <form action='/new_post' method='POST' id = "new_post">
+                <textarea name = "new_post" rows = "5">your post here</textarea>
+                <input type="submit" value="Submit Post">
+            </form>
+            <hr>
+        </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div id = "feed">
+            {% for row in range(0, feed_post_result|length) %}
+                <h3>{{feed_post_result[row]["first_name"] + " " + feed_post_result[row]["last_name"] + " - " + feed_post_result[row]["created_at"]}}</h3>
+                <p class = "post">{{feed_post_result[row]["post"]}}</p>
+                {% for com_row in range(0, feed_comment_result|length) %}
+                    {% if feed_comment_result[com_row]['post_id'] == feed_post_result[row]["id"] %}
+                        <h3>{{feed_comment_result[com_row]["first_name"] + " " + feed_comment_result[com_row]["last_name"] + " - " + feed_comment_result[com_row]["created_at"]}}</h3>
+                        <p class = "comment">{{feed_comment_result[com_row]["comment"]}}</p>
+                    {% endif %}
+                {% endfor %}
+                <h3>Post a comment</h3>
+                <form action='/new_comment/{{feed_post_result[row]["id"]}}' method='POST' id = "new_post"> <!-- this needs to somehow pass the post id of the button, maybe when its build it builds accordingly? -->
+                    <textarea name = "new_comment" rows = "5">your comment here</textarea>
+                    <input type="submit" value="Submit Comment">
+                </form>
+            {% endfor %}
+
+            <!-- use Jinja2 to take posts/comments passed by wall building route and display it -->
+            <!-- comment buttons need to generate with this specific post id -->
+            <!-- must be able to always build add comment seciont at the end of each post + current comments -->
+        </div>
+    </body>
+</html>

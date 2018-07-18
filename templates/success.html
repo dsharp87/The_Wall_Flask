@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Logged in</title>
+
+<!-- THIS PAGE WILL BE DEPRECIATED ONCE WE HAVE FULL WALL FUNCTIONALITY  -->
+
+</head>
+    <body>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{message}}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <h1>Users</h1>
+        <p></p>
+        <p>currently logged in: {{current_user_name}}</p>
+        <h1>DON'T STEAL THIS INFORMATION PLEASE ;)</h1>
+        <table>
+            <thead>
+                <th>first name</th>
+                <th>last name</th>
+                <th>email</th>
+                <th>password</th>
+                <th>created_at</th>
+                <th>updated_at</th>
+                <th>OPS</th>
+                <tbody>
+                {% for user in users: %}
+                <tr>
+                    <td>{{user['first_name']}}</td>
+                    <td>{{user['last_name']}}</td>
+                    <td>{{user['email']}}</td>
+                    <td>{{user['password']}}</td>
+                    <td>{{user['created_at']}}</td>
+                    <td>{{user['updated_at']}}</td>
+                    <td><a href="/update">UPDATE(i don't work yet)</a><a href="/delete/{{user['id']}}">DELETE</a></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </thead>
+        </table>
+        <form action='/logout' method='POST' id = "logout">
+            <input type="submit" value="Log Out">
+        </form>
+    </body>
+</html>
